@@ -1,170 +1,131 @@
 import React, { useState } from 'react';
-import emailjs from 'emailjs-com';
 
-const Form = () => {
-  const [formData, setFormData] = useState({
-    vehicleType: '',
-    name: '',
-    email: '',
-    phone: '',
-    make: '',
-    model: '',
-    year: '',
-    mileage: '',
-    engineSize: '',
-    fuelType: '',
-    transmissionType: '',
-    additionalInfo: ''
-  });
+const Cotizador = () => {
+  const [tipoVehiculo, setTipoVehiculo] = useState('auto');
+  const [marca, setMarca] = useState('');
+  const [modelo, setModelo] = useState('');
+  const [anio, setAnio] = useState('');
+  const [kilometros, setKilometros] = useState('');
+  const [cotizacion, setCotizacion] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+  const handleTipoVehiculoChange = (e) => {
+    setTipoVehiculo(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', formData, 'YOUR_USER_ID')
-      .then((result) => {
-        alert('Mensaje enviado con éxito');
-      }, (error) => {
-        alert('Error al enviar el mensaje: ', error.text);
-      });
+
+    // Aquí puedes hacer el cálculo de la cotización
+    const cotizacionCalculada = calcularCotizacion();
+
+    setCotizacion(cotizacionCalculada);
+  };
+
+  const calcularCotizacion = () => {
+    // Lógica de cálculo de cotización aquí
+    // Esto es solo un ejemplo básico
+    let kilometrosCalculados = parseInt(kilometros);
+
+    // Ejemplo simple: un 5 centavos por kilómetro
+    const cotizacion = kilometrosCalculados * 0.05;
+    return cotizacion.toFixed(2); // Redondeamos a dos decimales
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white bg-opacity-75 p-8 rounded-lg shadow-md space-y-4">
-      <div>
-        <label className="block text-sm font-bold">Tipo de Vehículo</label>
-        <select
-          name="vehicleType"
-          value={formData.vehicleType}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">Seleccione el tipo de vehículo</option>
-          <option value="auto">Auto</option>
-          <option value="moto">Moto</option>
-          <option value="camion">Camión</option>
-          <option value="otro">Otro</option>
-        </select>
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Nombre</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Correo Electrónico</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Teléfono</label>
-        <input
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Marca</label>
-        <input
-          type="text"
-          name="make"
-          value={formData.make}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Modelo</label>
-        <input
-          type="text"
-          name="model"
-          value={formData.model}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Año</label>
-        <input
-          type="text"
-          name="year"
-          value={formData.year}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Kilometraje</label>
-        <input
-          type="text"
-          name="mileage"
-          value={formData.mileage}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Tamaño del Motor</label>
-        <input
-          type="text"
-          name="engineSize"
-          value={formData.engineSize}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Tipo de Combustible</label>
-        <input
-          type="text"
-          name="fuelType"
-          value={formData.fuelType}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Tipo de Transmisión</label>
-        <input
-          type="text"
-          name="transmissionType"
-          value={formData.transmissionType}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-bold">Información Adicional</label>
-        <textarea
-          name="additionalInfo"
-          value={formData.additionalInfo}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          rows="4"
-        />
-      </div>
-      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">Enviar</button>
-    </form>
+    <div className="container mx-auto py-8">
+      <h1 className="text-2xl font-bold mb-4">Cotizador de Vehículos</h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tipoVehiculo">
+            Tipo de Vehículo
+          </label>
+          <select
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="tipoVehiculo"
+            value={tipoVehiculo}
+            onChange={handleTipoVehiculoChange}
+          >
+            <option value="auto">Auto</option>
+            <option value="camioneta">Camioneta</option>
+            <option value="moto">Moto</option>
+            <option value="camion">Camión</option>
+            <option value="lancha">Lancha</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="marca">
+            Marca
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="marca"
+            type="text"
+            placeholder="Ingrese la marca del vehículo"
+            value={marca}
+            onChange={(e) => setMarca(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="modelo">
+            Modelo
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="modelo"
+            type="text"
+            placeholder="Ingrese el modelo Exacto del vehículo (Como figura en la Cedula)"
+            value={modelo}
+            onChange={(e) => setModelo(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="anio">
+            Año
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="anio"
+            type="text"
+            placeholder="Ingrese el año del vehículo"
+            value={anio}
+            onChange={(e) => setAnio(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="kilometros">
+            Cantidad de Kilómetros
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="kilometros"
+            type="text"
+            placeholder="Ingrese la cantidad de kilómetros recorridos"
+            value={kilometros}
+            onChange={(e) => setKilometros(e.target.value)}
+          />
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            SOLICITAR COTIZACIÓN
+          </button>
+        </div>
+      </form>
+
+      {cotizacion !== null && (
+        <div className="mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <h2 className="text-lg font-bold mb-4">Cotización</h2>
+          <p className="text-gray-700 text-sm">
+            La cotización para el vehículo es: <strong>${cotizacion}</strong>
+          </p>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default Form;
+export default Cotizador;
